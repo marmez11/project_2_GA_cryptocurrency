@@ -1,7 +1,7 @@
 /////////////////////////////////////////////
 // Import Our Dependencies
 /////////////////////////////////////////////
-require("dotenv").config()
+// require("dotenv").config()
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
@@ -36,6 +36,6 @@ crypto_app.use("/crypto", cryptoRouter)
 //////////////////////////////////////////////
 // Server Listener
 //////////////////////////////////////////////
-app.listen(PORT, () => {
+crypto_app.listen(PORT, () => {
     console.log(`server is listening on port ${PORT}`)
 })
