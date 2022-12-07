@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %>
+    <body>
+        <main>
+            <div>
+              <form action="/crypto" method="POST">
+                <fieldset>
+                    <legend>Add New Crypto Coin/Token</legend>
+                    <label>
+                        NAME: <input type="text" name="name" placeholder="Enter New Crypto Coin/Token" />
+                    </label>
+                    <label>
+                        ID: <input type="number" name="ID" placeholder="Enter New Crypto Coin/Token ID number" />
+                    </label>
+                    <label>
+                        BLOCKCHAIN NUMBER: <input type="text" name="Blockchain" placeholder="Enter New Crypto Coin/Token Blockchain Hash ID number" />
+                    </label>
+                    <label>
+                        CRYPTOCURRENCY PRICE: <input type="number" name="ID" placeholder="Enter New Crypto Coin/Token ID price" />
+                    </label> 
+                </fieldset>
+                
+                <input type="submit" value="Add New Crypto Coin/Token" />
+              </form>        
+            </div>
+        </main>
+    </body>
+</html>
