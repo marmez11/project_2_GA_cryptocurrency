@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include("./head1.ejs") %>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cryptocurrency Exchange </title>
+        <script src="https://code.jquery.com/jquery-3.6.1.js" 
+    integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>    
+<style>
+    .crypto_exchange{
+        border-radius: 30px;
+    text-align: center;
+    color:white;
+    background-color: red;
+    -moz-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+-webkit-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    }
+    .Cryptocurrency_exchange_index{
+  writing-mode: horizontal;
+  border: 5px solid yellow;
+  border-inline-style:dashed;}
+</style>
+    <body>
+        <div class="crypto_exchange">
+    <h1><u><b>Cryptocurrency Exchange Order for Coins/Tokens</u></b></h1>
+    <main class="crypto_currrency_main">
+        <div class="Cryptocurrency_exchange_index">
+            <h2><p><a><b><em>Cryptocurrency Exchange Order Options: <img src="https://imgs.search.brave.com/epnk3fTfpGtuZ2CgheTrTcJ_mD6FqpfzyGBLoacE1Mg/rs:fit:750:500:1/g:ce/aHR0cHM6Ly9jdXJh/dGVkY3J5cHRvY3Vy/cmVuY3luZXdzLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAx/OS8wMi9CdXktU2Vs/bC1DcnlwdG9jdXJy/ZW5jeS1TZWN1cmVs/eS5qcGc" style="width:10%"></em></b></a></p></h2> 
+            <!--? within url are query paramter-->
+            <!--After question mark in query -->
+            <a href="/crypto/buy?"><button type="button">Buy Crypto</button></a>
+            <br>
+            <a href="/crypto/sell"><button type="button">Sell Crypto</button></a>
+        </div>
+        <button class="return_to_crypto_index"><a href="/crypto/crypto_index">Return to Crypto Home Screen</a></button>
+    </main>
+    </div>
+</body>
+</html>

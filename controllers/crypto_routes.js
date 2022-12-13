@@ -1,102 +1,158 @@
 /// creating dependencies and libraries
 const express = require("express");
 const bcrypt = require("bcryptjs");
-/// connecting to the Database Model Schema extracted from the Mongoose Database
-const bitcoin = require("../models/bitcoin.js");
-const crypto_exchange = require("../models/crypto_exchange.js");
-const ethereum = require("../models/ethereum.js");
+/// connecting to the Data
+const crypto_exchange = require("../model/crypto_ex");
+const ethereum = require("../model/ethereum_data");
+const bitcoin = require("../model/bitcoin_data")
 const { request } = require("http");
 const { response } = require("express");
 
-// creating Mongoose Database and establishing connections without errors
-const mongoose = require("mongoose");
-const DB_URL = process.env.PORT
-const configuration = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-mongoose.connection.on("open", ()=> {console.log("Connection has been established")})
-  .on("close", ()=>{console.log("Connection has been disconnected/destroyed")})
-  .on("error", (error)=>{console.log(`There has been an error that has occurred which is ${error}`)})
-  
 // creating router 
 const router = express.Router();
 
 ///////////////////////////////
-/// Animal User Display Routes
+/// Cryptocurrency Display Routes
 ///////////////////////////////
-
-// connect to Mongo Database
-mongoose.connect(DB_URL, configuration)
-
-// home route, checking if server is running
-router.get("/", (request, response) => {
-    response.send("Your server is running...")
-})
 
 // Error Handler
 function errorHandler(error, res){
     res.json(error)
 }
 
-// Seed Router
-router.get("/seed", (req, res) => {
-
-const startingcrypto_exchange = [
-    { crypto_exchange_id: 1, 
-    bitcoin_id: 1,
- ethereum_id: 2, purchase_status: true, 
- sell_status: false},
- { crypto_exchange_id: 2, 
-    bitcoin_id: 2,
- ethereum_id: null, purchase_status: false, 
- sell_status: true},
- { crypto_exchange_id: 3, 
-    bitcoin_id: null,
- ethereum_id: 2, purchase_status: true, 
- sell_status: false}
-]
-
-const ethereum = [
-    { ethereum_id: 1,
- ethereum_blockchain_hash_id: "0xb4bc263278d3ф82a652a8d73a6bfd8ec0ba1a63923bbb4f38147fb8a943da26d",
- ethereum_price: 140.58},
- { ethereum_id: 2,
-    ethereum_blockchain_hash_id: "0xb4bc2490!8d3ф82a652a8d73a6bfd8ec0ba1a63923bbb4f38147fb8a943da26d",
-    ethereum_price: 190.58}]
-
-const bitcoin = [
-        { bitcoin_id: 1,
-     bitcoin_blockchain_hash_id: "a1062db53e416d8fa109f23b7094a21e5b2645e16c5cf532fc90e4d8fbf5d48d",
-     bitcoin_price: 1220.58},
-     { bitcoin_id: 2,
-        bitcoin_blockchain_hash_id: "a1083db53e416d8fa10er23b7094a21e5b9890e16c5cf532fc90e4d8fbf5d48d",
-        bitcoin_price: 1910.11}]
-
-    //Delete all seed data and create new object with new seed data
-    crypto_exchange.deleteMany({}, (err, data) => {
-        //Create new crypto_exchange once old ones are deleted
-        crypto_exchange.create(startingcrypto_exchange, (err, data) => {
-            res.json(data)
-        } )
-    })
-
-    ethereum_data.deleteMany({}, (err, data) => {
-        //Create new ethereum once old ones are deleted
-        ethereum_data.create(ethereum, (err, data) => {
-            res.json(data)
-        } )
-    })
-
-    bitcoin_data.deleteMany({}, (err, data) => {
-        //Create new bitcoin once old ones are deleted
-        bitcoin_data.create(bitcoin, (err, data) => {
-            res.json(data)
-        } )
-    })
+// data display routes
+router.get("/crypto_exchange_data", (request, response) => {
+    response.send({crypto_exchange})
 })
+router.get("/bitcoin_data", async(request, response) => {
+    response.send({bitcoin})
+})
+router.get("/ethereum_data", async(request, response) => {
+    response.send({ethereum})
+})
+
+// home route, checking if server is running (Index)
+router.get("/", async(request, response)=>{
+    response.render('crypto_index.ejs', {bitcoin: bitcoin, ethereum: ethereum, crypto_ex: crypto_exchange})
+})
+
+// NEW route: (New) route for adding new pokemon to pokedex
+router.get('/crypto_exchange_new', (request, response)=>{
+    response.render("crypto_exchange_new.ejs")
+  })
+
+// NEW route: (New) route for adding new pokemon to pokedex
+router.get('/crypto_bitcoin_new', (request, response)=>{
+    response.render("crypto_bitcoin_new.ejs")
+  })
+
+// NEW route: (New) route for adding new pokemon to pokedex
+router.get('/crypto_ethereum_new', (request, response)=>{
+    response.render("crypto_ethereum_new.ejs")
+  })
+
+// crypto exchange instance for coin/token (Show) display route
+router.get("/crypto_exchange_show", async(request, response)=>{
+    response.render('crypto_exchange_show.ejs', {crypto_ex: crypto_exchange})
+})
+
+// crypto exchange for individual exchange instance for coin/token (Show) display route
+router.get("/crypto_exchange_show/:id", async(request, response)=>{
+    response.render('crypto_exchange_show_2.ejs', {crypto_ex: crypto_exchange[request.params.id], id: request.params.id})
+})
+
+// Destroy ROUTE - (DELETE) - DELETES ONE crypto exchange data instance
+router.delete("/crypto_exchange_show/:id", async(request, response) => {
+    crypto_exchange.splice(request.params.id, 1); //remove the item from the array
+    response.redirect("/"); //redirect back to index route
+  });
+
+// (EDIT) Route for editing crypto exchange instance information
+router.get("/crypto_exchange_edit/:id", async(request, response)=> {
+    response.render("crypto_exchange_edit.ejs", {crypto_ex: crypto_exchange[request.params.id], id: request.params.id})
+})
+
+// (UPDATE) ROUTE - PUT - updates a crypto exchange instance --> adds to the edit page
+router.put("/crypto_exchange_show/:id", async(request, response) => {
+    crypto_exchange[request.params.id] = {...crypto_exchange[request.params.id],...request.body}; 
+    response.redirect("/"); //redirect to the index page
+  });
+
+// create route - (POST) - CREATES/POSTS a a crypto exchange instance
+router.post("/crypto_exchange_show", async(request, response) => {
+    crypto_exchange.push(request.body);
+    response.redirect("/");
+  });
+
+// crypto bitcoin for coin/token (Show) display route
+router.get("/crypto_bitcoin_show", async(request, response)=>{
+    response.render('crypto_bitcoin_show.ejs', {bitcoin: bitcoin})
+})
+
+// crypto bitcoin for individual bitcoin instance for coin/token (Show) display route
+router.get("/crypto_bitcoin_show/:id", async(request, response)=>{
+    response.render('crypto_bitcoin_show_2.ejs', {bitcoin: bitcoin[request.params.id], id: request.params.id})
+})
+
+// Destroy ROUTE - (DELETE) - DELETES ONE crypto bitcoin data instance
+router.delete("/crypto_bitcoin_show/:id", async(request, response) => {
+    bitcoin.splice(request.params.id, 1); //remove the item from the array
+    response.redirect("/"); //redirect back to index route
+  });
+
+// (EDIT) Route for editing crypto bitcoin instance information
+router.get("/crypto_bitcoin_edit/:id", async(request, response)=> {
+    response.render("crypto_bitcoin_edit.ejs", {bitcoin: bitcoin[request.params.id], id: request.params.id})
+})
+
+// (UPDATE) ROUTE - PUT - updates a bitcoin instance --> adds to the edit page
+router.put("/crypto_bitcoin_show/:id", async(request, response) => {
+    //:id is the index of our pokemons array that we want to change
+    bitcoin[request.params.id] = {...bitcoin[request.params.id],...request.body}; //in our pokemons array, find the index that is specified in the url (:id).  Set that element to the value of req.body (the input data)
+    response.redirect("/"); //redirect to the index page
+  });
+
+// create route - (POST) - CREATES/POSTS a a crypto bitcoin instance
+router.post("/crypto_bitcoin_show", async(request, response) => {
+    bitcoin.push(request.body);
+    response.redirect("/");
+  });
+
+// ethereum bitcoin for coin/token (Show) display route
+router.get("/crypto_ethereum_show", async(request, response)=>{
+    response.render('crypto_ethereum_show.ejs', {ethereum: ethereum})
+})
+
+// crypto ethereum for individual ethereum instance for coin/token (Show) display route
+router.get("/crypto_ethereum_show/:id", async(request, response)=>{
+    response.render('crypto_ethereum_show_2.ejs', {ethereum: ethereum[request.params.id], id: request.params.id})
+})
+
+// Destroy ROUTE - (DELETE) - DELETES ONE crypto ethereum data instance
+router.delete("/crypto_ethereum_show/:id", async(request, response) => {
+    ethereum.splice(request.params.id, 1); //remove the item from the array
+    response.redirect("/"); //redirect back to index route
+  });
+
+// (EDIT) Route for editing crypto ethereum instance information
+router.get("/crypto_ethereum_edit/:id", async(request, response)=> {
+    response.render("crypto_ethereum_edit.ejs", {ethereum: ethereum[request.params.id], id: request.params.id})
+})
+
+// (UPDATE) ROUTE - PUT - updates a ethereum instance --> adds to the edit page
+router.put("/crypto_ethereum_show/:id", async(request, response) => {
+    ethereum[request.params.id] = {...ethereum[request.params.id],...request.body}; 
+    response.redirect("/"); //redirect to the index page
+  });
+
+// create route - (POST) - CREATES/POSTS a a crypto ethereum instance
+router.post("/crypto_ethereum_show", async(request, response) => {
+    ethereum.push(request.body);
+    response.redirect("/");
+  });
+
 
 //////////////////////////////////////////
 // Export the Router
 //////////////////////////////////////////
-module.exports = router
+module.exports = router;
