@@ -26,7 +26,10 @@
 #### Project Link on Render
 [Project 2 Deployed]()
 
-![Super Hero Profile(s) and Fight Zone](https://i.imgur.com/4pYWnhi.png)
+![Cryptocurrency Exchange](https://i.imgur.com/4pYWnhi.png)
+
+## Snippet of completed app
+![Cryptocurrency Exchange](https://i.imgur.com/VYw8CA1.png)
 
 ## Steps to create Project
  - Establish main framework and server for Cryptocurrency Exchange Index
